@@ -5,8 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+
 namespace CarReportSystem
 {
+    //メーカー（列挙型）
+    public enum CarMaker
+    {
+        DEFAULT,
+        トヨタ,
+        日産,
+        ホンダ,
+        スバル,
+        外車,
+        その他
+    }
+    [Serializable]
     class CarReport
     {
         //作成日
@@ -21,21 +36,11 @@ namespace CarReportSystem
         public Image Picture { get; set; }
 
 
-        public CarMaker Maker {get;set;}
+        public CarMaker Maker {get; set; }
 
 
     }
-    //メーカー（列挙型）
-    public enum CarMaker
-    {
-        DEFAULT,
-        トヨタ,
-        日産,
-        ホンダ,
-        スバル,
-        外車,
-        その他
-    }
+
 
 
 }
