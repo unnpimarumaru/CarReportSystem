@@ -13,17 +13,17 @@ using System.Windows.Forms;
 
 namespace CarReportSystem
 {
-    public partial class Form1 : Form
+    public partial class dgvArticle : Form
     {
         BindingList<CarReport> cars = new BindingList<CarReport>();
-        public Form1()
+        public dgvArticle()
         {
             InitializeComponent();
-            dgvArticle.DataSource = cars;
+            //dgvArticle.DataSource = cars;
         }
         private void nullCurrent()
         {
-            dgvArticle.CurrentCell = null;
+            carReportDataGridView.CurrentCell = null;
             btDelete.Enabled = false;
             btCorrected.Enabled = false;
 
@@ -167,26 +167,26 @@ namespace CarReportSystem
         {
             pbPicture.Image = null;
         }
-        private void dgvArticle_Click(object sender, EventArgs e)
+        private void carReportDataGridView_Click(object sender, EventArgs e)
         {
-
+            var test = carReportDataGridView.CurrentRow.Cells[3];//選択している行
             //選択したレコードを取り出す
             //データグリッドビューで選択した行のインデックスを元に
             //BindingListのデータを取得する
-            CarReport selectedCar = cars[dgvArticle.CurrentRow.Index];
-
-            cbRecorder.Text = selectedCar.Author;
-            cbCarName.Text = selectedCar.Name;
-            RadioBotton(selectedCar);
-            pbPicture.Image = selectedCar.Picture;
-
-            initButton();
+           // CarReport selectedCar = cars[carReportDataGridView.CurrentRow.Index];
+           //
+           //bRecorder.Text = selectedCar.Author;
+           //bCarName.Text = selectedCar.Name;
+           //adioBotton(selectedCar);
+           //bPicture.Image = selectedCar.Picture;
+           //
+            //initButton();
 
         }
         private void btCorrected_Click(object sender, EventArgs e)
         {
             //変更対象のレコード
-            CarReport ChengeCar = cars[dgvArticle.CurrentRow.Index];
+            CarReport ChengeCar = cars[carReportDataGridView.CurrentRow.Index];
 
             ChengeCar.Name = cbCarName.Text;
             ChengeCar.Author = cbRecorder.Text;
@@ -194,7 +194,7 @@ namespace CarReportSystem
             ChengeCar.Report = tbRepo.Text;
             ChengeCar.Picture = pbPicture.Image;
 
-            dgvArticle.Refresh(); //データグリッドビューの再読み込み
+            carReportDataGridView.Refresh(); //データグリッドビューの再読み込み
         }
 
         private void RadioBotton(CarReport selectedCar)
@@ -236,12 +236,15 @@ namespace CarReportSystem
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // TODO: このコード行はデータを 'infosys202021DataSet.CarReport' テーブルに読み込みます。必要に応じて移動、または削除をしてください。
+            this.carReportTableAdapter.Fill(this.infosys202021DataSet.CarReport);
+            carReportDataGridView.Columns[0].Visible = false; //id非表示
             initButton();
         }
 
         private void btDelete_Click(object sender, EventArgs e)
         {
-            cars.RemoveAt(dgvArticle.CurrentRow.Index);
+            cars.RemoveAt(carReportDataGridView.CurrentRow.Index);
             nullCurrent();
             initButton();
             AllClearMethod();
@@ -271,34 +274,26 @@ namespace CarReportSystem
 
         private void btOpen_Click(object sender, EventArgs e)
         {
-            //オープンファイルダイアログ
-            if (ofdOpenData.ShowDialog() == DialogResult.OK)
-            {
-
-                using (FileStream fs = new FileStream(ofdOpenData.FileName, FileMode.Open))
-                    try
-                    {
-                        BinaryFormatter formatter = new BinaryFormatter();
-
-                        //逆シリアル化して読み込む
-                        cars = (BindingList<CarReport>)formatter.Deserialize(fs);
-                        //データグリッドビューに再設定
-                        dgvArticle.DataSource = cars;
-                        //選択されている箇所を各コントロールへ表示
-                        dgvArticle_Click(sender, e);
-                    }
-                    catch (SerializationException se)
-                    {
-                        Console.WriteLine("Failed to deserialize. Reason: " + se.Message);
-                        throw;
-                    }
-            }
+            this.carReportTableAdapter.Fill(this.infosys202021DataSet.CarReport);
 
         }
 
         private void btEnd_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void carReportBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+        {
+            this.Validate();
+            this.carReportBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.infosys202021DataSet);
+
+        }
+
+        private void carReportDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
         }
     }
 }
