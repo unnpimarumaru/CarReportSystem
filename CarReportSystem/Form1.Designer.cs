@@ -32,6 +32,8 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.cbRecorder = new System.Windows.Forms.ComboBox();
+            this.carReportBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.infosys202021DataSet = new CarReportSystem.infosys202021DataSet();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.toyotaButton = new System.Windows.Forms.RadioButton();
@@ -67,15 +69,13 @@
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.carReportBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.infosys202021DataSet = new CarReportSystem.infosys202021DataSet();
             this.carReportTableAdapter = new CarReportSystem.infosys202021DataSetTableAdapters.CarReportTableAdapter();
             this.tableAdapterManager = new CarReportSystem.infosys202021DataSetTableAdapters.TableAdapterManager();
+            ((System.ComponentModel.ISupportInitialize)(this.carReportBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.infosys202021DataSet)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.carReportDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.carReportBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.infosys202021DataSet)).BeginInit();
             this.SuspendLayout();
             // 
             // dateTimePicker1
@@ -97,12 +97,21 @@
             // 
             // cbRecorder
             // 
-            this.cbRecorder.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.carReportBindingSource, "Author", true));
             this.cbRecorder.FormattingEnabled = true;
             this.cbRecorder.Location = new System.Drawing.Point(108, 64);
             this.cbRecorder.Name = "cbRecorder";
             this.cbRecorder.Size = new System.Drawing.Size(224, 20);
             this.cbRecorder.TabIndex = 2;
+            // 
+            // carReportBindingSource
+            // 
+            this.carReportBindingSource.DataMember = "CarReport";
+            this.carReportBindingSource.DataSource = this.infosys202021DataSet;
+            // 
+            // infosys202021DataSet
+            // 
+            this.infosys202021DataSet.DataSetName = "infosys202021DataSet";
+            this.infosys202021DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // label2
             // 
@@ -202,7 +211,6 @@
             // 
             // tbRepo
             // 
-            this.tbRepo.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.carReportBindingSource, "Report", true));
             this.tbRepo.Location = new System.Drawing.Point(108, 180);
             this.tbRepo.Multiline = true;
             this.tbRepo.Name = "tbRepo";
@@ -355,7 +363,6 @@
             // 
             // cbCarName
             // 
-            this.cbCarName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.carReportBindingSource, "Name", true));
             this.cbCarName.FormattingEnabled = true;
             this.cbCarName.Location = new System.Drawing.Point(108, 152);
             this.cbCarName.Name = "cbCarName";
@@ -372,6 +379,7 @@
             // 
             // carReportDataGridView
             // 
+            this.carReportDataGridView.AllowUserToAddRows = false;
             this.carReportDataGridView.AutoGenerateColumns = false;
             this.carReportDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.carReportDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -386,11 +394,12 @@
             this.carReportDataGridView.Location = new System.Drawing.Point(114, 267);
             this.carReportDataGridView.MultiSelect = false;
             this.carReportDataGridView.Name = "carReportDataGridView";
+            this.carReportDataGridView.ReadOnly = true;
             this.carReportDataGridView.RowTemplate.Height = 21;
             this.carReportDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.carReportDataGridView.Size = new System.Drawing.Size(962, 151);
             this.carReportDataGridView.TabIndex = 22;
-            this.carReportDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.carReportDataGridView_CellContentClick);
+            this.carReportDataGridView.Click += new System.EventHandler(this.carReportDataGridView_Click);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -434,16 +443,6 @@
             this.dataGridViewImageColumn1.HeaderText = "Picture";
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             // 
-            // carReportBindingSource
-            // 
-            this.carReportBindingSource.DataMember = "CarReport";
-            this.carReportBindingSource.DataSource = this.infosys202021DataSet;
-            // 
-            // infosys202021DataSet
-            // 
-            this.infosys202021DataSet.DataSetName = "infosys202021DataSet";
-            this.infosys202021DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // carReportTableAdapter
             // 
             this.carReportTableAdapter.ClearBeforeFill = true;
@@ -484,12 +483,12 @@
             this.Name = "dgvArticle";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.carReportBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.infosys202021DataSet)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPicture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.carReportDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.carReportBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.infosys202021DataSet)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

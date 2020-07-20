@@ -32,7 +32,7 @@ namespace CarReportSystem
 
         private void initButton()
         {
-            if (cars.Count <= 0)
+            if (carReportDataGridView != null)
             {
                 btCorrected.Enabled = false;
                 btDelete.Enabled = false;
@@ -54,8 +54,8 @@ namespace CarReportSystem
             else
             {
                 CarReport car = new CarReport()
-                {
 
+                {
                     CreatedDate = dateTimePicker1.Value,
 
                     Author = cbRecorder.Text,
@@ -106,17 +106,15 @@ namespace CarReportSystem
 
 
 
-
+        //クリアメソッド
         private void AllClearMethod()
         {
-
             cbRecorder.Text = ("");
             tbRepo.Clear();
             pbPicture.Image = null;
             cbCarName.Text = ("");
-
         }
-
+        //ラジオボタンチェック
         private CarMaker RadioBottonCheck()
         {
             if (toyotaButton.Checked == true)
@@ -167,22 +165,24 @@ namespace CarReportSystem
         {
             pbPicture.Image = null;
         }
+
+
         private void carReportDataGridView_Click(object sender, EventArgs e)
         {
-            var test = carReportDataGridView.CurrentRow.Cells[3];//選択している行
-            //選択したレコードを取り出す
-            //データグリッドビューで選択した行のインデックスを元に
-            //BindingListのデータを取得する
-           // CarReport selectedCar = cars[carReportDataGridView.CurrentRow.Index];
-           //
-           //bRecorder.Text = selectedCar.Author;
-           //bCarName.Text = selectedCar.Name;
-           //adioBotton(selectedCar);
-           //bPicture.Image = selectedCar.Picture;
-           //
-            //initButton();
+            dateTimePicker1.Value = (DateTime)carReportDataGridView.CurrentRow.Cells[1].Value;
+
+            cbRecorder.Text = carReportDataGridView.CurrentRow.Cells[2].Value.ToString();
+
+            RadioBotton(carReportDataGridView.CurrentRow.Cells[3].Value.ToString());
+
+            cbCarName.Text = carReportDataGridView.CurrentRow.Cells[4].Value.ToString();
+
+            tbRepo.Text = carReportDataGridView.CurrentRow.Cells[5].Value.ToString();
+
 
         }
+
+
         private void btCorrected_Click(object sender, EventArgs e)
         {
             //変更対象のレコード
@@ -190,42 +190,39 @@ namespace CarReportSystem
 
             ChengeCar.Name = cbCarName.Text;
             ChengeCar.Author = cbRecorder.Text;
-            RadioBotton(ChengeCar);
+            RadioBotton(ChengeCar.ToString());
             ChengeCar.Report = tbRepo.Text;
             ChengeCar.Picture = pbPicture.Image;
 
             carReportDataGridView.Refresh(); //データグリッドビューの再読み込み
         }
 
-        private void RadioBotton(CarReport selectedCar)
+        private void RadioBotton(string carMaker)
         {
-            switch (selectedCar.Maker)
+            switch (carMaker)
             {
-                case CarMaker.トヨタ:
+                case "トヨタ":
                     toyotaButton.Checked = true;
                     break;
 
-                case CarMaker.日産:
+                case "日産":
                     nissanButton.Checked = true;
                     break;
 
-                case CarMaker.ホンダ:
+                case "ホンダ":
                     hondaButton.Checked = true;
                     break;
 
-                case CarMaker.スバル:
+                case"スバル":
                     subaruButton.Checked = true;
                     break;
 
-                case CarMaker.外車:
+                case "外車":
                     gaisyaButton.Checked = true;
                     break;
 
-                case CarMaker.その他:
+                case "その他":
                     othersButton.Checked = true;
-                    break;
-
-                default:
                     break;
 
             }
@@ -237,9 +234,7 @@ namespace CarReportSystem
         private void Form1_Load(object sender, EventArgs e)
         {
             // TODO: このコード行はデータを 'infosys202021DataSet.CarReport' テーブルに読み込みます。必要に応じて移動、または削除をしてください。
-            this.carReportTableAdapter.Fill(this.infosys202021DataSet.CarReport);
             carReportDataGridView.Columns[0].Visible = false; //id非表示
-            initButton();
         }
 
         private void btDelete_Click(object sender, EventArgs e)
@@ -275,7 +270,9 @@ namespace CarReportSystem
         private void btOpen_Click(object sender, EventArgs e)
         {
             this.carReportTableAdapter.Fill(this.infosys202021DataSet.CarReport);
-
+            
+            initButton();
+            carReportDataGridView_Click(sender, e);
         }
 
         private void btEnd_Click(object sender, EventArgs e)
@@ -289,11 +286,6 @@ namespace CarReportSystem
             this.carReportBindingSource.EndEdit();
             this.tableAdapterManager.UpdateAll(this.infosys202021DataSet);
 
-        }
-
-        private void carReportDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            
         }
     }
 }
