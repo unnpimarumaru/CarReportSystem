@@ -32,7 +32,7 @@ namespace CarReportSystem
 
         private void initButton()
         {
-            if (carReportDataGridView != null)
+            if (infosys202021DataSet.CarReport.Count <= 0 )
             {
                 btCorrected.Enabled = false;
                 btDelete.Enabled = false;
@@ -126,7 +126,7 @@ namespace CarReportSystem
             {
                 return CarMaker.日産;
             }
-            if (othersButton.Checked == true)
+            if (hondaButton.Checked == true)
             {
                 return CarMaker.ホンダ;
             }
@@ -164,37 +164,67 @@ namespace CarReportSystem
         private void btPictureDelete_Click(object sender, EventArgs e)
         {
             pbPicture.Image = null;
+                
         }
 
 
         private void carReportDataGridView_Click(object sender, EventArgs e)
         {
-            dateTimePicker1.Value = (DateTime)carReportDataGridView.CurrentRow.Cells[1].Value;
+            try
+            {
+                dateTimePicker1.Value = (DateTime)carReportDataGridView.CurrentRow.Cells[1].Value;
 
-            cbRecorder.Text = carReportDataGridView.CurrentRow.Cells[2].Value.ToString();
+                cbRecorder.Text = carReportDataGridView.CurrentRow.Cells[2].Value.ToString();
 
-            RadioBotton(carReportDataGridView.CurrentRow.Cells[3].Value.ToString());
+                RadioBotton(carReportDataGridView.CurrentRow.Cells[3].Value.ToString());
 
-            cbCarName.Text = carReportDataGridView.CurrentRow.Cells[4].Value.ToString();
+                cbCarName.Text = carReportDataGridView.CurrentRow.Cells[4].Value.ToString();
 
-            tbRepo.Text = carReportDataGridView.CurrentRow.Cells[5].Value.ToString();
+                tbRepo.Text = carReportDataGridView.CurrentRow.Cells[5].Value.ToString();
 
-
+                pbPicture.Image = ByteArrayToImage((byte[])carReportDataGridView.CurrentRow.Cells[6].Value);
+            }
+            catch(InvalidCastException)//画像が登録されていないとき
+            {
+                pbPicture.Image = null;
+            }
+            catch(Exception ex)//上記以外のデータをすべて拾う
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
-
+        
 
         private void btCorrected_Click(object sender, EventArgs e)
         {
             //変更対象のレコード
-            CarReport ChengeCar = cars[carReportDataGridView.CurrentRow.Index];
+            //CarReport ChengeCar = cars[carReportDataGridView.CurrentRow.Index];
+            
+            carReportDataGridView.CurrentRow.Cells[1].Value = dateTimePicker1.Value;
+            
+            carReportDataGridView.CurrentRow.Cells[2].Value = cbRecorder.Text;
 
-            ChengeCar.Name = cbCarName.Text;
-            ChengeCar.Author = cbRecorder.Text;
-            RadioBotton(ChengeCar.ToString());
-            ChengeCar.Report = tbRepo.Text;
-            ChengeCar.Picture = pbPicture.Image;
+            carReportDataGridView.CurrentRow.Cells[3].Value = RadioBottonCheck();
+
+            carReportDataGridView.CurrentRow.Cells[4].Value = cbCarName.Text;
+
+            carReportDataGridView.CurrentRow.Cells[5].Value = tbRepo.Text;
+
+            if(pbPicture.Image != null)
+            {
+                carReportDataGridView.CurrentRow.Cells[6].Value = ImageToByteArray(pbPicture.Image);
+            }
+            else
+            {
+                carReportDataGridView.CurrentRow.Cells[6].Value = null;
+            }
 
             carReportDataGridView.Refresh(); //データグリッドビューの再読み込み
+
+            this.Validate();
+            this.carReportBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.infosys202021DataSet);
+
         }
 
         private void RadioBotton(string carMaker)
@@ -235,11 +265,12 @@ namespace CarReportSystem
         {
             // TODO: このコード行はデータを 'infosys202021DataSet.CarReport' テーブルに読み込みます。必要に応じて移動、または削除をしてください。
             carReportDataGridView.Columns[0].Visible = false; //id非表示
+            initButton();
         }
 
         private void btDelete_Click(object sender, EventArgs e)
         {
-            cars.RemoveAt(carReportDataGridView.CurrentRow.Index);
+            
             nullCurrent();
             initButton();
             AllClearMethod();
@@ -286,6 +317,21 @@ namespace CarReportSystem
             this.carReportBindingSource.EndEdit();
             this.tableAdapterManager.UpdateAll(this.infosys202021DataSet);
 
+        }
+        // バイト配列をImageオブジェクトに変換
+        public static Image ByteArrayToImage(byte[] byteData)
+        {
+            ImageConverter imgconv = new ImageConverter();
+            Image img = (Image)imgconv.ConvertFrom(byteData);
+            return img;
+        }
+
+        // Imageオブジェクトをバイト配列に変換
+        public static byte[] ImageToByteArray(Image img)
+        {
+            ImageConverter imgconv = new ImageConverter();
+            byte[] byteData = (byte[])imgconv.ConvertTo(img, typeof(byte[]));
+            return byteData;
         }
     }
 }
