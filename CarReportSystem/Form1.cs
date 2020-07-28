@@ -56,7 +56,7 @@ namespace CarReportSystem
                 CarReport car = new CarReport()
 
                 {
-                    CreatedDate = dateTimePicker1.Value,
+                    CreatedDate = dateTimePickerSerch.Value,
 
                     Author = cbRecorder.Text,
 
@@ -172,7 +172,7 @@ namespace CarReportSystem
         {
             try
             {
-                dateTimePicker1.Value = (DateTime)carReportDataGridView.CurrentRow.Cells[1].Value;
+                dateTimePickerSerch.Value = (DateTime)carReportDataGridView.CurrentRow.Cells[1].Value;
 
                 cbRecorder.Text = carReportDataGridView.CurrentRow.Cells[2].Value.ToString();
 
@@ -200,7 +200,7 @@ namespace CarReportSystem
             //変更対象のレコード
             //CarReport ChengeCar = cars[carReportDataGridView.CurrentRow.Index];
             
-            carReportDataGridView.CurrentRow.Cells[1].Value = dateTimePicker1.Value;
+            carReportDataGridView.CurrentRow.Cells[1].Value = dateTimePickerSerch.Value;
             
             carReportDataGridView.CurrentRow.Cells[2].Value = cbRecorder.Text;
 
@@ -332,6 +332,19 @@ namespace CarReportSystem
             ImageConverter imgconv = new ImageConverter();
             byte[] byteData = (byte[])imgconv.ConvertTo(img, typeof(byte[]));
             return byteData;
+        }
+
+        private void btSearchExe_Click(object sender, EventArgs e)
+        {
+            if (dateTimePickerSerch.Value.ToString() != "")
+            {
+                this.carReportTableAdapter.FillByDateTime(this.infosys202021DataSet.CarReport, dateTimePickerSerch.Value.ToString());
+            }
+            else
+            {
+                this.carReportTableAdapter.FillBy1(this.infosys202021DataSet.CarReport, tbSearchCarName.Text);
+                this.carReportTableAdapter.FillBy(this.infosys202021DataSet.CarReport, tbmakerSearch.Text);
+            }
         }
     }
 }
