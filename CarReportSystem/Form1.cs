@@ -336,15 +336,30 @@ namespace CarReportSystem
 
         private void btSearchExe_Click(object sender, EventArgs e)
         {
-            if (dateTimePickerSerch.Value.ToString() != "")
+            if (btOR.Checked = true )
             {
-                this.carReportTableAdapter.FillByDateTime(this.infosys202021DataSet.CarReport, dateTimePickerSerch.Value.ToString());
+
+                this.carReportTableAdapter.FillByOR(this.infosys202021DataSet.CarReport, dateTimePickerSerch.Value.ToString(), tbSearchCarName.Text, tbmakerSearch.Text);
             }
             else
             {
-                this.carReportTableAdapter.FillBy1(this.infosys202021DataSet.CarReport, tbSearchCarName.Text);
-                this.carReportTableAdapter.FillBy(this.infosys202021DataSet.CarReport, tbmakerSearch.Text);
+                if (tbSearchCarName.Text == "" && tbmakerSearch.Text == "")
+                {
+                    this.carReportTableAdapter.FillByDateTime(this.infosys202021DataSet.CarReport, dateTimePickerSerch.Value.ToString());
+                }
+                else if (tbSearchCarName.Text == "")
+                {
+                    this.carReportTableAdapter.FillByMaker(this.infosys202021DataSet.CarReport, tbmakerSearch.Text, dateTimePickerSerch.Value.ToString());
+                }
+                else if (tbmakerSearch.Text == "")
+                {
+                    this.carReportTableAdapter.FillByNameadnDate(this.infosys202021DataSet.CarReport, tbSearchCarName.Text, dateTimePickerSerch.Value.ToString());
+                }
+                else 
+                {
+                    this.carReportTableAdapter.FillByName(this.infosys202021DataSet.CarReport, tbSearchCarName.Text, tbmakerSearch.Text, dateTimePickerSerch.Value.ToString());
+                }
             }
         }
     }
-}
+} 
